@@ -1,0 +1,327 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{1F115910-67CE-474C-9B31-76DC54DFC36F}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>BlocklyPro</RootNamespace>
+    <AssemblyName>BlocklyPro</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\newtonsoft.json\10.0.1\lib\netstandard1.3\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="SimpleInjector, Version=4.7.1.0, Culture=neutral, PublicKeyToken=984cb50dea722e99, processorArchitecture=MSIL">
+      <HintPath>packages\SimpleInjector.4.7.1\lib\net45\SimpleInjector.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Annotations, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.ComponentModel.Annotations.4.5.0\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Net.Http.2.0.20126.16343\lib\net40\System.Net.Http.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.Extensions, Version=2.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Net.Http.Formatting.Extension.5.2.3.0\lib\System.Net.Http.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\System.Net.Http.Formatting.Extension.5.2.3.0\lib\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Primitives, Version=4.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Net.Http.Formatting.Extension.5.2.3.0\lib\System.Net.Http.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Net.Http.2.0.20126.16343\lib\net40\System.Net.Http.WebRequest.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Code\UcFunction.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Code\UcFunction.Designer.cs">
+      <DependentUpon>UcFunction.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Code\UcLoop.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Code\UcLoop.Designer.cs">
+      <DependentUpon>UcLoop.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Code\UcMoveForward.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Code\UcMoveForward.Designer.cs">
+      <DependentUpon>UcMoveForward.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Code\UcTurn.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Code\UcTurn.Designer.cs">
+      <DependentUpon>UcTurn.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmLogin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmLogin.Designer.cs">
+      <DependentUpon>FrmLogin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmParent.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmParent.Designer.cs">
+      <DependentUpon>FrmParent.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GameCreator\FrmNewGame.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GameCreator\FrmNewGame.Designer.cs">
+      <DependentUpon>FrmNewGame.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GameCreator\Workbench.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GameCreator\Workbench.Designer.cs">
+      <DependentUpon>Workbench.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GameRunner\GameRunner.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GameRunner\GameRunner.Designer.cs">
+      <DependentUpon>GameRunner.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GameTools\UCCharactor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GameTools\UCCharactor.Designer.cs">
+      <DependentUpon>UCCharactor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GameTools\UCHorizontalLine.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GameTools\UCHorizontalLine.Designer.cs">
+      <DependentUpon>UCHorizontalLine.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GameTools\UCTarget.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GameTools\UCTarget.Designer.cs">
+      <DependentUpon>UCTarget.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GameTools\UCVerticalLine.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GameTools\UCVerticalLine.Designer.cs">
+      <DependentUpon>UCVerticalLine.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GameCodeModel.cs" />
+    <Compile Include="Models\GameModel.cs" />
+    <Compile Include="Models\GameMapModel.cs" />
+    <Compile Include="Models\GamePayloads\BasePayload.cs" />
+    <Compile Include="Models\GamePayloads\Statement.cs" />
+    <Compile Include="Models\GamePayloads\Turn.cs" />
+    <Compile Include="Models\LoginModel.cs" />
+    <Compile Include="Models\PlayGameModel.cs" />
+    <Compile Include="Models\RegisterModel.cs" />
+    <Compile Include="Models\TokenModel.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServiceRepository\BaseServiceRepository.cs" />
+    <Compile Include="ServiceRepository\GameServiceRepository.cs" />
+    <Compile Include="ServiceRepository\IdentityServiceRepository.cs" />
+    <Compile Include="ServiceRepository\IGameServiceRepository.cs" />
+    <Compile Include="ServiceRepository\IIdentityServiceRepository.cs" />
+    <Compile Include="ServiceRepository\XHRServiceRepository.cs" />
+    <Compile Include="Utility\Enums.cs" />
+    <Compile Include="Utility\Exceptions.cs" />
+    <Compile Include="Utility\Extentions.cs" />
+    <Compile Include="Utility\GlobalConfig.cs" />
+    <Compile Include="Utility\Helper.cs" />
+    <Compile Include="Utility\HttpRequester.cs" />
+    <Compile Include="Utility\Request.cs" />
+    <Compile Include="Utility\XhrRequest.cs" />
+    <EmbeddedResource Include="Code\UcFunction.resx">
+      <DependentUpon>UcFunction.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Code\UcLoop.resx">
+      <DependentUpon>UcLoop.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Code\UcMoveForward.resx">
+      <DependentUpon>UcMoveForward.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Code\UcTurn.resx">
+      <DependentUpon>UcTurn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmLogin.resx">
+      <DependentUpon>FrmLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmParent.resx">
+      <DependentUpon>FrmParent.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GameCreator\FrmNewGame.resx">
+      <DependentUpon>FrmNewGame.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GameCreator\Workbench.resx">
+      <DependentUpon>Workbench.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GameRunner\GameRunner.resx">
+      <DependentUpon>GameRunner.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GameTools\UCCharactor.resx">
+      <DependentUpon>UCCharactor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GameTools\UCHorizontalLine.resx">
+      <DependentUpon>UCHorizontalLine.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GameTools\UCTarget.resx">
+      <DependentUpon>UCTarget.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GameTools\UCVerticalLine.resx">
+      <DependentUpon>UCVerticalLine.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\code.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\hrLine.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\vrLine.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\grid.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\carrot.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\rabbit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.6.1 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\save.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\save2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\load.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\delete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\play.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\load1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\reset.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\info.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\deletegame.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\iconfinder_Streamline-75_185095.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\eastereggbg-1024x540.jpg" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
