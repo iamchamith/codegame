@@ -15,6 +15,6 @@ namespace BlocklyPro.Core.AppService.Interfaces
         Task<List<KeyValuePair<int, string>>> GetGames(Request<bool?> request);
         Task<List<KeyValuePair<int, string>>> GetMyGames(Request<bool> request);
         Task SaveGameMap(Request<int, List<GameMapDto>> request);
-            
+        Task<List<KeyValuePair<int, string>>> GetPublishGames(Request<bool> request);
     }
 }

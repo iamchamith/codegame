@@ -43,16 +43,16 @@
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.btnSave = new System.Windows.Forms.ToolStripButton();
             this.btnInfo = new System.Windows.Forms.ToolStripButton();
+            this.btnClear = new System.Windows.Forms.ToolStripButton();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.btnGo = new System.Windows.Forms.ToolStripButton();
             this.lblTime = new System.Windows.Forms.ToolStripLabel();
+            this.btnLoadPlayGame = new System.Windows.Forms.ToolStripButton();
+            this.cmbPlayGames = new System.Windows.Forms.ToolStripComboBox();
             this.codeCore = new System.Windows.Forms.Panel();
             this.lnkRefresh = new System.Windows.Forms.LinkLabel();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.tmrClock = new System.Windows.Forms.Timer(this.components);
-            this.cmbPlayGames = new System.Windows.Forms.ToolStripComboBox();
-            this.btnClear = new System.Windows.Forms.ToolStripButton();
-            this.btnLoadPlayGame = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1.SuspendLayout();
             this.codeCore.SuspendLayout();
             this.SuspendLayout();
@@ -99,8 +99,8 @@
             this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.sTATEMENTToolStripMenuItem,
             this.cONDITIONToolStripMenuItem,
-            this.fUNCTIONToolStripMenuItem,
-            this.lOOPToolStripMenuItem});
+            this.lOOPToolStripMenuItem,
+            this.fUNCTIONToolStripMenuItem});
             this.toolStripDropDownButton1.Image = global::BlocklyPro.Properties.Resources.code;
             this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
@@ -130,10 +130,10 @@
             // 
             // lOOPToolStripMenuItem
             // 
-            this.lOOPToolStripMenuItem.Enabled = false;
             this.lOOPToolStripMenuItem.Name = "lOOPToolStripMenuItem";
             this.lOOPToolStripMenuItem.Size = new System.Drawing.Size(185, 30);
             this.lOOPToolStripMenuItem.Text = "LOOP";
+            this.lOOPToolStripMenuItem.Click += new System.EventHandler(this.LOOPToolStripMenuItem_Click);
             // 
             // btnLoadGame
             // 
@@ -185,6 +185,16 @@
             this.btnInfo.Text = "Instractions";
             this.btnInfo.Click += new System.EventHandler(this.BtnInfo_Click);
             // 
+            // btnClear
+            // 
+            this.btnClear.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnClear.Image = ((System.Drawing.Image)(resources.GetObject("btnClear.Image")));
+            this.btnClear.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnClear.Name = "btnClear";
+            this.btnClear.Size = new System.Drawing.Size(23, 25);
+            this.btnClear.Text = "Clear";
+            this.btnClear.Click += new System.EventHandler(this.BtnClear_Click);
+            // 
             // toolStripLabel1
             // 
             this.toolStripLabel1.Name = "toolStripLabel1";
@@ -207,6 +217,23 @@
             this.lblTime.Name = "lblTime";
             this.lblTime.Size = new System.Drawing.Size(40, 25);
             this.lblTime.Text = "00s";
+            // 
+            // btnLoadPlayGame
+            // 
+            this.btnLoadPlayGame.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.btnLoadPlayGame.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnLoadPlayGame.Image = global::BlocklyPro.Properties.Resources.load;
+            this.btnLoadPlayGame.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnLoadPlayGame.Name = "btnLoadPlayGame";
+            this.btnLoadPlayGame.Size = new System.Drawing.Size(23, 25);
+            this.btnLoadPlayGame.Text = "Load play game";
+            this.btnLoadPlayGame.Click += new System.EventHandler(this.BtnLoadPlayGame_Click);
+            // 
+            // cmbPlayGames
+            // 
+            this.cmbPlayGames.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.cmbPlayGames.Name = "cmbPlayGames";
+            this.cmbPlayGames.Size = new System.Drawing.Size(121, 28);
             // 
             // codeCore
             // 
@@ -238,33 +265,6 @@
             // 
             this.tmrClock.Interval = 1000;
             this.tmrClock.Tick += new System.EventHandler(this.TmrClock_Tick);
-            // 
-            // cmbPlayGames
-            // 
-            this.cmbPlayGames.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.cmbPlayGames.Name = "cmbPlayGames";
-            this.cmbPlayGames.Size = new System.Drawing.Size(121, 28);
-            // 
-            // btnClear
-            // 
-            this.btnClear.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnClear.Image = ((System.Drawing.Image)(resources.GetObject("btnClear.Image")));
-            this.btnClear.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new System.Drawing.Size(23, 25);
-            this.btnClear.Text = "Clear";
-            this.btnClear.Click += new System.EventHandler(this.BtnClear_Click);
-            // 
-            // btnLoadPlayGame
-            // 
-            this.btnLoadPlayGame.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.btnLoadPlayGame.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnLoadPlayGame.Image = global::BlocklyPro.Properties.Resources.load;
-            this.btnLoadPlayGame.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnLoadPlayGame.Name = "btnLoadPlayGame";
-            this.btnLoadPlayGame.Size = new System.Drawing.Size(23, 25);
-            this.btnLoadPlayGame.Text = "Load play game";
-            this.btnLoadPlayGame.Click += new System.EventHandler(this.BtnLoadPlayGame_Click);
             // 
             // GameRunner
             // 

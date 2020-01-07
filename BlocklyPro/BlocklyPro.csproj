@@ -101,6 +101,12 @@
     <Compile Include="Code\UcLoop.Designer.cs">
       <DependentUpon>UcLoop.cs</DependentUpon>
     </Compile>
+    <Compile Include="Code\UCLoop2.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Code\UCLoop2.Designer.cs">
+      <DependentUpon>UCLoop2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Code\UcMoveForward.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -171,6 +177,7 @@
     <Compile Include="Models\GameModel.cs" />
     <Compile Include="Models\GameMapModel.cs" />
     <Compile Include="Models\GamePayloads\BasePayload.cs" />
+    <Compile Include="Models\GamePayloads\Loop2.cs" />
     <Compile Include="Models\GamePayloads\Statement.cs" />
     <Compile Include="Models\GamePayloads\Turn.cs" />
     <Compile Include="Models\LoginModel.cs" />
@@ -198,6 +205,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Code\UcLoop.resx">
       <DependentUpon>UcLoop.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Code\UCLoop2.resx">
+      <DependentUpon>UCLoop2.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Code\UcMoveForward.resx">
       <DependentUpon>UcMoveForward.cs</DependentUpon>
@@ -324,4 +334,8 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
 </Project>

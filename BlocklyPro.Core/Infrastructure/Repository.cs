@@ -47,6 +47,15 @@ namespace BlocklyPro.Core.Infrastructure
             dbSet.RemoveRange(items);
         }
 
+        public void Delete(T items)
+        {
+            if (items == null)
+            {
+                throw new InvalidDataException("Item cannot be null or empty");
+            }
+            dbSet.Remove(items);
+        }
+
         public async Task Delete(Expression<Func<T, bool>> filter)
         {
             var entities = await Table.Where(filter).ToListAsync();

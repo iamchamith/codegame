@@ -10,6 +10,7 @@ namespace BlocklyPro.Code
     {
         private const int _oneStep = 50;
         public const int Identify = 3;
+        public const int Height = 50;
         private readonly GameRunner.GameRunner _gameRunner;
         public UcMoveForward(GameRunner.GameRunner gameRunner)
         {
@@ -38,20 +39,19 @@ namespace BlocklyPro.Code
 
         public int GetStepCount()
         {
-            return Convert.ToInt32(txtSteps.Value) * _oneStep;
+            return 1 * _oneStep;
         }
 
         public string GetPayload()
         {
             return new Statement
             {
-                Step = Convert.ToInt32(txtSteps.Value)
+                Step = 1
             }.ToJsonString();
         }
 
         public UserControl SetPayload(Statement item)
         {
-            txtSteps.Value = item.Step;
             return this;
         }
     }

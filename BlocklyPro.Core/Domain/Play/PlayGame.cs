@@ -5,24 +5,24 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace BlocklyPro.Core.Domain.Play
 {
     [Table(nameof(PlayGame), Schema = "Application")]
-    public class PlayGame: BaseEntity
+    public class PlayGame : BaseEntity
     {
-        public int GameId { get; protected set; }
-        public int PlayerId { get; protected set; }
-        public bool IsCorrectSolution { get; protected set; } = false;
-        public DateTime CreatedOn { get; protected set; }
-        public int Score { get; protected set; }
+        public virtual int GameId { get; protected set; }
+        public virtual int PlayerId { get; protected set; }
+        public virtual bool IsCorrectSolution { get; protected set; } = false;
+        public virtual DateTime CreatedOn { get; protected set; }
+        public virtual int Score { get; protected set; }
 
         [ForeignKey(nameof(PlayerId))]
-        public User User { get; set; }
+        public virtual User User { get; set; }
         [ForeignKey(nameof(GameId))]
-        public Game Game { get; set; }
-        public List<GameCode> GameCode { get; set; }
+        public virtual Game Game { get; set; }
+        public virtual List<GameCode> GameCode { get; set; }
         public PlayGame()
         {
-            
+
         }
-        public PlayGame(int gameId,int playerId)
+        public PlayGame(int gameId, int playerId)
         {
             GameId = gameId;
             PlayerId = playerId;

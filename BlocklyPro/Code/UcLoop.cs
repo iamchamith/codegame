@@ -6,6 +6,7 @@ namespace BlocklyPro.Code
 {
     public partial class UcLoop : UserControl
     {
+        public const int Height = 50;
         public const int Identify = 2;
         public UcLoop()
         {

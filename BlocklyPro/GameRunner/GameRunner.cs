@@ -16,7 +16,6 @@ namespace BlocklyPro.GameRunner
     public partial class GameRunner : Form
     {
         private readonly IGameServiceRepository _gameServiceRepository;
-        private int GameIndex = 1;
         private List<UserControl> Codes;
         private Enums.Derection _derection;
         private int X = 0;
@@ -26,6 +25,7 @@ namespace BlocklyPro.GameRunner
         private int movePx;
         private int _selectedGameId = 0;
         private int _time = 1;
+        private bool _useToSubmitDefault = false;
         private GameModel _selectedGameObject;
         public List<KeyValuePair<int, string>> _playGames = new List<KeyValuePair<int, string>>();
 
@@ -38,13 +38,22 @@ namespace BlocklyPro.GameRunner
         public GameRunner(IGameServiceRepository gameServiceRepository, int gameIndex)
         {
             _gameServiceRepository = gameServiceRepository;
+            this._selectedGameId = gameIndex;
+            _useToSubmitDefault = true;
             InitializeComponent();
-            GameIndex = gameIndex;
+            SetAsDefaultSubmittionSettings();
+        }
+
+        void SetAsDefaultSubmittionSettings()
+        {
+            this.Text = $"{Text}-Default Submittion";
+            cmbGames.Enabled = false;
+            btnGo.Visible = lblTime.Visible = cmbPlayGames.Visible = btnLoadPlayGame.Visible = false;
         }
 
         private async void GameRunner_Load(object sender, EventArgs e)
         {
-            await LoadGames();
+            #region init
             Codes = new List<UserControl>();
             _derection = Enums.Derection.Right;
 
@@ -62,16 +71,22 @@ namespace BlocklyPro.GameRunner
             move1.Location = new Point(0, codeIndex);
             codeCore.Controls.Add(move1);
             Codes.Add(move1);
-            codeIndex += 50;
+            codeIndex += UcFunction.Height;
 
             var move2 = new UcLoop();
             move2.Location = new Point(10, codeIndex);
             codeCore.Controls.Add(move2);
             Codes.Add(move2);
-            codeIndex += 50;
+            codeIndex += UcLoop.Height;
+            #endregion
+            await LoadGames();
         }
 
         private async void btnLoadGame_Click(object sender, System.EventArgs e)
+        {
+            await LoadGameMap();
+        }
+        private async Task LoadGameMap()
         {
             try
             {
@@ -145,12 +160,17 @@ namespace BlocklyPro.GameRunner
         {
             try
             {
-                var result = await _gameServiceRepository.GetPublishGames(new Request<bool>(false).SetToken());
+                var result = _useToSubmitDefault
+                    ? await _gameServiceRepository.GetMyGames(new Request<bool>(false).SetToken())
+                    : await _gameServiceRepository.GetPublishGames(new Request<bool>(false).SetToken());
                 cmbGames.ComboBox.ValueMember = "key";
                 cmbGames.ComboBox.DisplayMember = "value";
                 cmbGames.ComboBox.DataSource = result;
-                cmbGames.SelectedIndex = GameIndex;
-                btnLoadGame.PerformClick();
+                cmbGames.SelectedItem = this._selectedGameId;
+
+                //load default game solution
+                await LoadPlayGame();
+                await LoadGameMap();
             }
             catch (Exception e)
             {
@@ -188,6 +208,8 @@ namespace BlocklyPro.GameRunner
             }
         }
 
+        #region manage codes
+
         private int codeIndex = 0;
 
         private void sTATEMENTToolStripMenuItem_Click(object sender, EventArgs e)
@@ -196,7 +218,7 @@ namespace BlocklyPro.GameRunner
             move.Location = new Point(20, codeIndex);
             codeCore.Controls.Add(move);
             Codes.Add(move);
-            codeIndex += 50;
+            codeIndex += UcMoveForward.Height;
         }
 
         private void cONDITIONToolStripMenuItem_Click(object sender, EventArgs e)
@@ -205,38 +227,57 @@ namespace BlocklyPro.GameRunner
             move.Location = new Point(20, codeIndex);
             codeCore.Controls.Add(move);
             Codes.Add(move);
-            codeIndex += 100;
+            codeIndex += UcTurn.Height;
         }
-
+        private void LOOPToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var move = new UCLoop2(this);
+            move.Location = new Point(20, codeIndex);
+            codeCore.Controls.Add(move);
+            Codes.Add(move);
+            codeIndex += UCLoop2.Height;
+        }
         public void RemoveItem(UserControl uc)
         {
             codeCore.Controls.Remove(uc);
             Codes.Remove(uc);
             ResetCode();
         }
-
         public void ResetCode()
         {
             codeIndex = 100;
-            foreach (UserControl item in Codes)
+            foreach (var item in Codes)
             {
                 if (item is UcTurn)
                 {
                     codeCore.Controls.Remove(item);
                     item.Location = new Point(20, codeIndex);
                     codeCore.Controls.Add(item);
-                    codeIndex += 100;
+                    codeIndex += UcTurn.Height;
                 }
                 else if (item is UcMoveForward)
                 {
                     codeCore.Controls.Remove(item);
                     item.Location = new Point(20, codeIndex);
                     codeCore.Controls.Add(item);
-                    codeIndex += 50;
+                    codeIndex += UcMoveForward.Height;
+                }
+                else if (item is UCLoop2)
+                {
+                    codeCore.Controls.Remove(item);
+                    item.Location = new Point(20, codeIndex);
+                    codeCore.Controls.Add(item);
+                    codeIndex += UCLoop2.Height;
                 }
             }
         }
+        private void lnkRefresh_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            ResetCode();
+        }
+        #endregion
 
+        #region play game
         private void btnPlay_Click(object sender, EventArgs e)
         {
             _derection = Enums.Derection.Right;
@@ -255,6 +296,7 @@ namespace BlocklyPro.GameRunner
                 if (line is UcTurn)
                 {
                     var itemX = line as UcTurn;
+                    itemX.HighlightsFontColor();
                     var derection = itemX.GetDerection();
                     GetDerection(derection);
                     Run();
@@ -262,6 +304,13 @@ namespace BlocklyPro.GameRunner
                 else if (line is UcMoveForward)
                 {
                     var itemX = line as UcMoveForward;
+                    itemX.HighlightsFontColor();
+                    timer1.Start();
+                    movePx = itemX.GetStepCount();
+                }
+                else if (line is UCLoop2)
+                {
+                    var itemX = line as UCLoop2;
                     itemX.HighlightsFontColor();
                     timer1.Start();
                     movePx = itemX.GetStepCount();
@@ -310,7 +359,6 @@ namespace BlocklyPro.GameRunner
             movePx--;
             //Console.Beep();
         }
-
         void GetDerection(Enums.Derection derection)
         {
             if (derection == Enums.Derection.Left)
@@ -358,7 +406,6 @@ namespace BlocklyPro.GameRunner
                 }
             }
         }
-
         void ResetFontColor()
         {
             foreach (UserControl item in Codes)
@@ -368,19 +415,24 @@ namespace BlocklyPro.GameRunner
                     var itemx = item as UcMoveForward;
                     itemx.ResetFontColor();
                 }
+                else if (item is UCLoop2)
+                {
+                    var itemx = item as UCLoop2;
+                    itemx.ResetFontColor();
+                }
+                else if (item is UcTurn)
+                {
+                    var itemx = item as UcTurn;
+                    itemx.ResetFontColor();
+                }
             }
         }
-
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
             btnLoadGame.PerformClick();
             btnPlay.PerformClick();
         }
-
-        private void lnkRefresh_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            ResetCode();
-        }
+        #endregion
 
         private void BtnInfo_Click(object sender, EventArgs e)
         {
@@ -389,7 +441,8 @@ namespace BlocklyPro.GameRunner
 
         private void CmbGames_SelectedIndexChanged(object sender, EventArgs e)
         {
-            this._selectedGameId = ((System.Collections.Generic.KeyValuePair<int, string>)cmbGames.SelectedItem).Key;
+            if (!_useToSubmitDefault)
+                this._selectedGameId = ((System.Collections.Generic.KeyValuePair<int, string>)cmbGames.SelectedItem).Key;
             btnLoadGame.PerformClick();
         }
 
@@ -421,16 +474,19 @@ namespace BlocklyPro.GameRunner
         {
             try
             {
-                MessageBox.Show("Press Okay to save the game");
-                var index = 0;
-                var playGames = new PlayGameModel(_selectedGameId);
-                Codes.ForEach(item =>
+                if (Helper.Confirm("Do you need to save the game?"))
                 {
-                    var codeType = GetCodeType(item, out var payload);
-                    playGames.AddGameCode(index++, codeType, payload);
-                });
-                await _gameServiceRepository.CreateGamePlays(new Request<PlayGameModel>(playGames).SetToken());
-                MessageBox.Show("Saved");
+
+                    var index = 0;
+                    var playGames = new PlayGameModel(_selectedGameId);
+                    Codes.ForEach(item =>
+                    {
+                        var codeType = GetCodeType(item, out var payload);
+                        playGames.AddGameCode(index++, codeType, payload);
+                    });
+                    await _gameServiceRepository.CreateGamePlays(new Request<PlayGameModel>(playGames).SetToken());
+                    MessageBox.Show("Saved");
+                }
             }
             catch (Exception exception)
             {
@@ -461,6 +517,11 @@ namespace BlocklyPro.GameRunner
                 payload = (uc as UcTurn).GetPayload();
                 return UcTurn.Identify;
             }
+            else if (uc is UCLoop2)
+            {
+                payload = (uc as UCLoop2).GetPayload();
+                return UCLoop2.Identify;
+            }
             else
             {
                 throw new ArgumentException("Invalid code");
@@ -469,30 +530,50 @@ namespace BlocklyPro.GameRunner
 
         private async void BtnLoadPlayGame_Click(object sender, EventArgs e)
         {
+            await LoadPlayGame();
+        }
+
+        private async Task LoadPlayGame()
+        {
+
             try
             {
-                if (!Helper.Confirm("Do you need to load the game"))
-                    return;
+                //if (!Helper.Confirm("Do you need to load the game"))
+                //    return;
 
-                btnClear.PerformClick();
+                ClearCode();
 
                 var result = await _gameServiceRepository.GetGamePlaysCode(
-                    new Request<int>(((System.Collections.Generic.KeyValuePair<int, string>)cmbPlayGames.SelectedItem)
-                        .Key).SetToken());
+                    new Request<int>(_selectedGameId).SetToken());
 
                 var gameCodes = result.GameCodes.OrderBy(p => p.Order).ToList();
 
-                for (int i = 2; i < gameCodes.Count; i++)
+                for (var i = 2; i < gameCodes.Count; i++)
                 {
                     var item = gameCodes[i];
-                    var movex = item.CodeType == UcMoveForward.Identify ? new UcMoveForward(this)
-                            .SetPayload(item.Payload.ToObject<Statement>()) :
-                        item.CodeType == UcTurn.Identify ? new UcTurn(this).SetPayload(item.Payload.ToObject<Turn>()) :
+                    var movex = new UserControl();
+                    if (item.CodeType == UcMoveForward.Identify)
+                    {
+                        movex = new UcMoveForward(this)
+                            .SetPayload(item.Payload.ToObject<Statement>());
+                        codeIndex += UcMoveForward.Height;
+                    }
+                    else if (item.CodeType == UcTurn.Identify)
+                    {
+                        movex = new UcTurn(this).SetPayload(item.Payload.ToObject<Turn>());
+                        codeIndex += UcTurn.Height;
+                    }
+                    else if (item.CodeType == UCLoop2.Identify)
+                    {
+                        movex = new UCLoop2(this).SetPayload(item.Payload.ToObject<Loop2>());
+                        codeIndex += UCLoop2.Height;
+                    }
+                    else
                         throw new ArgumentException();
+
                     movex.Location = new Point(10, codeIndex);
                     codeCore.Controls.Add(movex);
                     Codes.Add(movex);
-                    codeIndex += 50;
                 }
             }
             catch (Exception exception)
@@ -500,8 +581,12 @@ namespace BlocklyPro.GameRunner
                 new ExceptionHandler(exception);
             }
         }
-
         private void BtnClear_Click(object sender, EventArgs e)
+        {
+            ClearCode();
+        }
+
+        void ClearCode()
         {
             try
             {
@@ -522,5 +607,6 @@ namespace BlocklyPro.GameRunner
                 new ExceptionHandler(exception);
             }
         }
+
     }
 }

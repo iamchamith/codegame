@@ -57,49 +57,63 @@ namespace BlocklyPro.GameCreator
 
         private async void CreateGame()
         {
-            if (string.IsNullOrEmpty(txtName.Text))
+            try
             {
-                Helper.Info(message: "Please provide the game name");
-            }
-            if (Helper.Confirm())
-            {
-                var request = new GameModel()
+                if (string.IsNullOrEmpty(txtName.Text))
                 {
-                    Name = txtName.Text,
-                    Time = Convert.ToInt32(txtTime.Value),
-                    Instructions = txtDescription.Text,
-                    IsPublish = chkIsPublish.Checked
-                };
-                var x = new Request<GameModel>(request)
-                    .SetToken();
-                await _gameServiceRepository.CreateGame(x);
-                await _parentWorkbench.LoadGames();
-                this.Close();
+                    Helper.Info(message: "Please provide the game name");
+                }
+                if (Helper.Confirm())
+                {
+                    var request = new GameModel()
+                    {
+                        Name = txtName.Text,
+                        Time = Convert.ToInt32(txtTime.Value),
+                        Instructions = txtDescription.Text,
+                        IsPublish = chkIsPublish.Checked
+                    };
+                    var x = new Request<GameModel>(request)
+                        .SetToken();
+                    await _gameServiceRepository.CreateGame(x);
+                    await _parentWorkbench.LoadGames();
+                    this.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                new ExceptionHandler(e);
             }
         }
 
         private async void UpdateGame()
         {
-            if (string.IsNullOrEmpty(txtName.Text))
+            try
             {
-                Helper.Info(message: "Please provide the game name");
-            }
-            if (Helper.Confirm())
-            {
-                var request = new GameModel()
+                if (string.IsNullOrEmpty(txtName.Text))
                 {
-                    Id = _gameId,
-                    Name = txtName.Text,
-                    Time = Convert.ToInt32(txtTime.Value),
-                    Instructions = txtDescription.Text,
-                    IsPublish = chkIsPublish.Checked
-                };
-                var x = new Request<GameModel>(request)
-                    .SetToken();
-                await _gameServiceRepository.UpdateGame(x);
-                await _parentWorkbench.LoadGames();
-                MessageBox.Show("Updated");
-                this.Close();
+                    Helper.Info(message: "Please provide the game name");
+                }
+                if (Helper.Confirm())
+                {
+                    var request = new GameModel()
+                    {
+                        Id = _gameId,
+                        Name = txtName.Text,
+                        Time = Convert.ToInt32(txtTime.Value),
+                        Instructions = txtDescription.Text,
+                        IsPublish = chkIsPublish.Checked
+                    };
+                    var x = new Request<GameModel>(request)
+                        .SetToken();
+                    await _gameServiceRepository.UpdateGame(x);
+                    await _parentWorkbench.LoadGames();
+                    MessageBox.Show("Updated");
+                    this.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                new ExceptionHandler(e);
             }
         }
 

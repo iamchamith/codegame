@@ -13,11 +13,12 @@
 
         public enum CodeType
         {
-            None,
-            Function,
-            Loop,
-            Condition,
-            Statement
+            None = 0,
+            Function = 1,
+            Loop = 2,
+            Statement = 3,
+            Condition = 4,
+            Loop2 = 5
         }
     }
 }

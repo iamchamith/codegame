@@ -9,6 +9,7 @@ namespace BlocklyPro.Code
     {
         private readonly GameRunner.GameRunner _gameRunner;
         public const int Identify = 4;
+        public const int Height = 100;
         public UcTurn(GameRunner.GameRunner gameRunner)
         {
             _gameRunner = gameRunner;

@@ -30,11 +30,10 @@
         {
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.aCTIONSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.lblUser = new System.Windows.Forms.ToolStripMenuItem();
             this.lOGOUTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.eXCITToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cREATEAGAMEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pLAYAGAMEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.lblUser = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -55,12 +54,17 @@
             // 
             this.aCTIONSToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.lblUser,
-            this.lOGOUTToolStripMenuItem,
-            this.eXCITToolStripMenuItem});
+            this.lOGOUTToolStripMenuItem});
             this.aCTIONSToolStripMenuItem.Image = global::BlocklyPro.Properties.Resources.iconfinder_Streamline_75_185095;
             this.aCTIONSToolStripMenuItem.Name = "aCTIONSToolStripMenuItem";
             this.aCTIONSToolStripMenuItem.Size = new System.Drawing.Size(121, 32);
             this.aCTIONSToolStripMenuItem.Text = "ACTIONS";
+            // 
+            // lblUser
+            // 
+            this.lblUser.Name = "lblUser";
+            this.lblUser.Size = new System.Drawing.Size(180, 32);
+            this.lblUser.Text = "User";
             // 
             // lOGOUTToolStripMenuItem
             // 
@@ -68,13 +72,6 @@
             this.lOGOUTToolStripMenuItem.Size = new System.Drawing.Size(180, 32);
             this.lOGOUTToolStripMenuItem.Text = "LOGOUT";
             this.lOGOUTToolStripMenuItem.Click += new System.EventHandler(this.LOGOUTToolStripMenuItem_Click);
-            // 
-            // eXCITToolStripMenuItem
-            // 
-            this.eXCITToolStripMenuItem.Name = "eXCITToolStripMenuItem";
-            this.eXCITToolStripMenuItem.Size = new System.Drawing.Size(180, 32);
-            this.eXCITToolStripMenuItem.Text = "EXIT";
-            this.eXCITToolStripMenuItem.Click += new System.EventHandler(this.EXCITToolStripMenuItem_Click);
             // 
             // cREATEAGAMEToolStripMenuItem
             // 
@@ -91,12 +88,6 @@
             this.pLAYAGAMEToolStripMenuItem.Size = new System.Drawing.Size(162, 32);
             this.pLAYAGAMEToolStripMenuItem.Text = "PLAY A GAME";
             this.pLAYAGAMEToolStripMenuItem.Click += new System.EventHandler(this.pLAYAGAMEToolStripMenuItem_Click);
-            // 
-            // lblUser
-            // 
-            this.lblUser.Name = "lblUser";
-            this.lblUser.Size = new System.Drawing.Size(180, 32);
-            this.lblUser.Text = "User";
             // 
             // FrmParent
             // 
@@ -123,7 +114,6 @@
         private System.Windows.Forms.ToolStripMenuItem cREATEAGAMEToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem pLAYAGAMEToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aCTIONSToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem eXCITToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem lOGOUTToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem lblUser;
     }

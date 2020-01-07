@@ -100,7 +100,7 @@ namespace BlocklyPro.Api.Controllers.V1
             try
             {
                 _httpContext = HttpContext;
-                var result = await _gameAppService.GetGames(Request((bool?)true));
+                var result = await _gameAppService.GetPublishGames(Request(false));
                 return Ok(result);
             }
             catch (Exception e)

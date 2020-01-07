@@ -59,9 +59,13 @@ namespace BlocklyPro.Core.AppService
             try
             {
                 var game = await _unitOfWork.GameRepository.Table
+                    .Include(p => p.PlayGame)
                     .SingleAsync(p => p.Id == request.Item.Id);
                 if (game.IsNull())
                     throw new RecordNotFoundException("Game was not founded");
+
+                if (request.Item.IsPublish && !game.PlayGame.Any(p => p.IsCorrectSolution))
+                    throw new InvalidDataException("Before publish the game, you need provide correct solution");
 
                 game.UpdateGame(request.UserId, request.Item.Name, request.Item.Time, request.Item.Instructions,
                     request.Item.IsPublish);
@@ -111,6 +115,22 @@ namespace BlocklyPro.Core.AppService
                 query = (request.Item.HasValue) ? query.Where(p => p.IsPublish == request.Item) : query;
                 return (await query.ToListAsync())
                     .Select(p => new KeyValuePair<int, string>(p.Id, p.Name)).ToList();
+            }
+            catch (Exception e)
+            {
+                throw e.HandleException();
+            }
+        }
+        public async Task<List<KeyValuePair<int, string>>> GetPublishGames(Request<bool> request)
+        {
+            try
+            {
+                var query = _unitOfWork.GameRepository.TableAsNoTracking
+                    .Include(p => p.User)
+                    .Where(p => p.IsPublish
+                                && p.UserId != request.UserId);
+                return (await query.ToListAsync())
+                    .Select(p => new KeyValuePair<int, string>(p.Id, $"{p.Name} by {p.User.Name}")).ToList();
             }
             catch (Exception e)
             {

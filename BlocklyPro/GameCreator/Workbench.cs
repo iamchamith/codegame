@@ -571,7 +571,7 @@ namespace BlocklyPro.GameCreator
 
         private async void btnLoadGame_Click(object sender, EventArgs e)
         {
-            RemoveItems();
+  
             var result = new List<GameMapModel>();
             try
             {
@@ -582,7 +582,7 @@ namespace BlocklyPro.GameCreator
                 Helper.Error(ex: ex);
                 return;
             }
-
+            RemoveItems();
             var name = string.Empty;
             foreach (var item in result)
             {
@@ -639,8 +639,7 @@ namespace BlocklyPro.GameCreator
 
         private void btnPlay_Click(object sender, EventArgs e)
         {
-            var gameItem = (System.Collections.Generic.KeyValuePair<int, string>)cmbGames.SelectedItem;
-            var runner = new GameRunner.GameRunner(_gameServiceRepository, cmbGames.SelectedIndex);
+            var runner = new GameRunner.GameRunner(_gameServiceRepository, _selectedGame);
             runner.ShowDialog();
         }
         private async void btnDeleteGame_Click(object sender, EventArgs e)

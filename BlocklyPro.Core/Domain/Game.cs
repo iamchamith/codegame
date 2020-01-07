@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using BlocklyPro.Core.Domain.Play;
 using BlocklyPro.Core.Utility;
 
 namespace BlocklyPro.Core.Domain
@@ -10,14 +11,15 @@ namespace BlocklyPro.Core.Domain
     {
         [Required, StringLength(DbConstrants.Name)]
         public virtual string Name { get; protected set; }
-        public int UserId { get; protected set; }
-        public int Time { get; protected set; }
+        public virtual int UserId { get; protected set; }
+        public virtual int Time { get; protected set; }
         [Required, StringLength(DbConstrants.Description)]
-        public string Instructions { get; protected set; }
-        public bool IsPublish { get; protected set; }
+        public virtual string Instructions { get; protected set; }
+        public virtual bool IsPublish { get; protected set; }
         [ForeignKey(nameof(UserId))]
-        public User User { get; set; }
+        public virtual User User { get; set; }
         public virtual List<GameMap> GameMap { get; set; }
+        public virtual List<PlayGame> PlayGame { get; set; }
         public Game()
         {
         }
@@ -30,7 +32,7 @@ namespace BlocklyPro.Core.Domain
             UserId = user.Id;
         }
 
-        public Game Create(string name,int time, string instructions)
+        public Game Create(string name, int time, string instructions)
         {
             Name = name;
             Time = time;
@@ -51,7 +53,7 @@ namespace BlocklyPro.Core.Domain
             return this;
         }
 
-        public Game UpdateGame(int userid,string name, int time, string instructions,bool isPublished)
+        public Game UpdateGame(int userid, string name, int time, string instructions, bool isPublished)
         {
             if (!userid.Is(UserId))
                 throw new UnauthorizedException();
