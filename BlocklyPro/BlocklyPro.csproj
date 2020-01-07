@@ -119,6 +119,15 @@
     <Compile Include="Code\UcTurn.Designer.cs">
       <DependentUpon>UcTurn.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forcasting\ForecastTable.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Forcasting\FrmForcasting.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forcasting\FrmForcasting.Designer.cs">
+      <DependentUpon>FrmForcasting.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmLogin.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -214,6 +223,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Code\UcTurn.resx">
       <DependentUpon>UcTurn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forcasting\FrmForcasting.resx">
+      <DependentUpon>FrmForcasting.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmLogin.resx">
       <DependentUpon>FrmLogin.cs</DependentUpon>

@@ -36,23 +36,26 @@
             this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
             this.sTATEMENTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cONDITIONToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.fUNCTIONToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lOOPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fUNCTIONToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btnLoadGame = new System.Windows.Forms.ToolStripButton();
             this.btnPlay = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.btnSave = new System.Windows.Forms.ToolStripButton();
             this.btnInfo = new System.Windows.Forms.ToolStripButton();
             this.btnClear = new System.Windows.Forms.ToolStripButton();
-            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.btnGo = new System.Windows.Forms.ToolStripButton();
             this.lblTime = new System.Windows.Forms.ToolStripLabel();
             this.btnLoadPlayGame = new System.Windows.Forms.ToolStripButton();
             this.cmbPlayGames = new System.Windows.Forms.ToolStripComboBox();
+            this.btnHint = new System.Windows.Forms.ToolStripButton();
             this.codeCore = new System.Windows.Forms.Panel();
             this.lnkRefresh = new System.Windows.Forms.LinkLabel();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.tmrClock = new System.Windows.Forms.Timer(this.components);
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.btnForcast = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1.SuspendLayout();
             this.codeCore.SuspendLayout();
             this.SuspendLayout();
@@ -60,7 +63,7 @@
             // toolStrip1
             // 
             this.toolStrip1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.toolStrip1.Font = new System.Drawing.Font("Segoe UI", 14F);
+            this.toolStrip1.Font = new System.Drawing.Font("Segoe UI", 20F);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripSeparator1,
             this.cmbGames,
@@ -69,16 +72,19 @@
             this.btnPlay,
             this.toolStripButton1,
             this.btnSave,
+            this.toolStripSeparator2,
+            this.btnHint,
             this.btnInfo,
             this.btnClear,
-            this.toolStripLabel1,
+            this.toolStripSeparator3,
             this.btnGo,
             this.lblTime,
             this.btnLoadPlayGame,
-            this.cmbPlayGames});
+            this.cmbPlayGames,
+            this.btnForcast});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1218, 28);
+            this.toolStrip1.Size = new System.Drawing.Size(1218, 40);
             this.toolStrip1.TabIndex = 10;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -121,19 +127,19 @@
             this.cONDITIONToolStripMenuItem.Text = "CONDITION";
             this.cONDITIONToolStripMenuItem.Click += new System.EventHandler(this.cONDITIONToolStripMenuItem_Click);
             // 
-            // fUNCTIONToolStripMenuItem
-            // 
-            this.fUNCTIONToolStripMenuItem.Enabled = false;
-            this.fUNCTIONToolStripMenuItem.Name = "fUNCTIONToolStripMenuItem";
-            this.fUNCTIONToolStripMenuItem.Size = new System.Drawing.Size(185, 30);
-            this.fUNCTIONToolStripMenuItem.Text = "FUNCTION";
-            // 
             // lOOPToolStripMenuItem
             // 
             this.lOOPToolStripMenuItem.Name = "lOOPToolStripMenuItem";
             this.lOOPToolStripMenuItem.Size = new System.Drawing.Size(185, 30);
             this.lOOPToolStripMenuItem.Text = "LOOP";
             this.lOOPToolStripMenuItem.Click += new System.EventHandler(this.LOOPToolStripMenuItem_Click);
+            // 
+            // fUNCTIONToolStripMenuItem
+            // 
+            this.fUNCTIONToolStripMenuItem.Enabled = false;
+            this.fUNCTIONToolStripMenuItem.Name = "fUNCTIONToolStripMenuItem";
+            this.fUNCTIONToolStripMenuItem.Size = new System.Drawing.Size(185, 30);
+            this.fUNCTIONToolStripMenuItem.Text = "FUNCTION";
             // 
             // btnLoadGame
             // 
@@ -151,7 +157,7 @@
             this.btnPlay.Image = global::BlocklyPro.Properties.Resources.play;
             this.btnPlay.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnPlay.Name = "btnPlay";
-            this.btnPlay.Size = new System.Drawing.Size(23, 25);
+            this.btnPlay.Size = new System.Drawing.Size(23, 37);
             this.btnPlay.Text = "Play";
             this.btnPlay.Click += new System.EventHandler(this.btnPlay_Click);
             // 
@@ -195,13 +201,6 @@
             this.btnClear.Text = "Clear";
             this.btnClear.Click += new System.EventHandler(this.BtnClear_Click);
             // 
-            // toolStripLabel1
-            // 
-            this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(17, 25);
-            this.toolStripLabel1.Text = "|";
-            this.toolStripLabel1.ToolTipText = "|";
-            // 
             // btnGo
             // 
             this.btnGo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -235,13 +234,23 @@
             this.cmbPlayGames.Name = "cmbPlayGames";
             this.cmbPlayGames.Size = new System.Drawing.Size(121, 28);
             // 
+            // btnHint
+            // 
+            this.btnHint.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnHint.Image = ((System.Drawing.Image)(resources.GetObject("btnHint.Image")));
+            this.btnHint.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnHint.Name = "btnHint";
+            this.btnHint.Size = new System.Drawing.Size(23, 37);
+            this.btnHint.Text = "Hint";
+            this.btnHint.TextImageRelation = System.Windows.Forms.TextImageRelation.TextAboveImage;
+            // 
             // codeCore
             // 
             this.codeCore.Controls.Add(this.lnkRefresh);
             this.codeCore.Dock = System.Windows.Forms.DockStyle.Right;
-            this.codeCore.Location = new System.Drawing.Point(822, 28);
+            this.codeCore.Location = new System.Drawing.Point(822, 40);
             this.codeCore.Name = "codeCore";
-            this.codeCore.Size = new System.Drawing.Size(396, 505);
+            this.codeCore.Size = new System.Drawing.Size(396, 493);
             this.codeCore.TabIndex = 11;
             // 
             // lnkRefresh
@@ -265,6 +274,26 @@
             // 
             this.tmrClock.Interval = 1000;
             this.tmrClock.Tick += new System.EventHandler(this.TmrClock_Tick);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 28);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 28);
+            // 
+            // btnForcast
+            // 
+            this.btnForcast.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.btnForcast.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnForcast.Image = ((System.Drawing.Image)(resources.GetObject("btnForcast.Image")));
+            this.btnForcast.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnForcast.Name = "btnForcast";
+            this.btnForcast.Size = new System.Drawing.Size(23, 37);
+            this.btnForcast.Text = "Forcast";
             // 
             // GameRunner
             // 
@@ -304,12 +333,15 @@
         private System.Windows.Forms.LinkLabel lnkRefresh;
         private System.Windows.Forms.ToolStripButton btnSave;
         private System.Windows.Forms.ToolStripButton btnInfo;
-        private System.Windows.Forms.ToolStripLabel toolStripLabel1;
         private System.Windows.Forms.ToolStripButton btnGo;
         private System.Windows.Forms.ToolStripLabel lblTime;
         private System.Windows.Forms.Timer tmrClock;
         private System.Windows.Forms.ToolStripButton btnClear;
         private System.Windows.Forms.ToolStripComboBox cmbPlayGames;
         private System.Windows.Forms.ToolStripButton btnLoadPlayGame;
+        private System.Windows.Forms.ToolStripButton btnHint;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripButton btnForcast;
     }
 }
