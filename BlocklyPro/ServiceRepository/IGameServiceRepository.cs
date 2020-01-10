@@ -21,5 +21,6 @@ namespace BlocklyPro.ServiceRepository
         Task<List<KeyValuePair<int, string>>> GetGamePlays(Request<int> request);
         Task<PlayGameModel> GetGamePlaysCode(Request<int> request);
         Task CreateGamePlays(Request<PlayGameModel> request);
+        Task<PlayGameModel> GetGameSolution(Request<int> request);
     }
 }

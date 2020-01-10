@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using BlocklyPro.Code;
+using BlocklyPro.Forcasting;
 using BlocklyPro.GameTools;
 using BlocklyPro.Models;
 using BlocklyPro.Models.GamePayloads;
@@ -27,8 +28,9 @@ namespace BlocklyPro.GameRunner
         private int _time = 1;
         private bool _useToSubmitDefault = false;
         private GameModel _selectedGameObject;
-        public List<KeyValuePair<int, string>> _playGames = new List<KeyValuePair<int, string>>();
-
+        private List<KeyValuePair<int, string>> _playGames = new List<KeyValuePair<int, string>>();
+        private PlayGameModel _correctSolution = new PlayGameModel();
+        private bool _isGameRunning = false;
         public GameRunner(IGameServiceRepository gameServiceRepository)
         {
             _gameServiceRepository = gameServiceRepository;
@@ -48,7 +50,9 @@ namespace BlocklyPro.GameRunner
         {
             this.Text = $"{Text}-Default Submittion";
             cmbGames.Enabled = false;
-            btnGo.Visible = lblTime.Visible = cmbPlayGames.Visible = btnLoadPlayGame.Visible = false;
+            btnGo.Visible = lblTime.Visible =
+                btnHint.Visible= btnForcast.Visible=
+                cmbPlayGames.Visible = btnLoadPlayGame.Visible = false;
         }
 
         private async void GameRunner_Load(object sender, EventArgs e)
@@ -79,9 +83,15 @@ namespace BlocklyPro.GameRunner
             Codes.Add(move2);
             codeIndex += UcLoop.Height;
             #endregion
-            await LoadGames();
-        }
 
+            await LoadInit();
+        }
+        private async Task LoadInit()
+        {
+            await LoadGames();
+            await LoadGameMap();
+            await LoadSolution();
+        }
         private async void btnLoadGame_Click(object sender, System.EventArgs e)
         {
             await LoadGameMap();
@@ -90,6 +100,7 @@ namespace BlocklyPro.GameRunner
         {
             try
             {
+                codeCore.Visible = true;
                 var index = 0;
                 RemoveItems();
                 var result = await _gameServiceRepository.GetGameMap(new Request<int>(this._selectedGameId).SetToken());
@@ -155,7 +166,7 @@ namespace BlocklyPro.GameRunner
             cmbPlayGames.ComboBox.DataSource = _playGames;
             cmbPlayGames.SelectedIndex = 0;
         }
-
+ 
         private async Task LoadGames()
         {
             try
@@ -169,8 +180,7 @@ namespace BlocklyPro.GameRunner
                 cmbGames.SelectedItem = this._selectedGameId;
 
                 //load default game solution
-                await LoadPlayGame();
-                await LoadGameMap();
+          
             }
             catch (Exception e)
             {
@@ -280,11 +290,32 @@ namespace BlocklyPro.GameRunner
         #region play game
         private void btnPlay_Click(object sender, EventArgs e)
         {
-            _derection = Enums.Derection.Right;
-            ResetFontColor();
-            codeLine = 0;
-            movePx = 0;
-            Run();
+            if (!_isGameRunning)
+            {
+                _derection = Enums.Derection.Right;
+                ResetFontColor();
+                codeLine = 0;
+                movePx = 0;
+                IsGameRunnning(true);
+                Run();
+            }
+            else
+            {
+                timer1.Stop();
+                IsGameRunnning(false);
+            }
+           
+        }
+
+        void IsGameRunnning(bool isGameRunning)
+        {
+            _isGameRunning = isGameRunning;
+            btnPlay.Image = isGameRunning ? Properties.Resources.pause : Properties.Resources.play;
+            btnCodeMenu.Enabled = !isGameRunning;
+            btnLoadGame.Enabled = !isGameRunning;
+            btnHint.Enabled = !isGameRunning;
+            btnInfo.Enabled = !isGameRunning;
+            btnClear.Enabled = !isGameRunning;
         }
 
         void Run()
@@ -323,6 +354,7 @@ namespace BlocklyPro.GameRunner
             catch (ArgumentOutOfRangeException e)
             {
                 MessageBox.Show("Complete");
+                IsGameRunnning(false);
             }
         }
 
@@ -446,13 +478,15 @@ namespace BlocklyPro.GameRunner
             btnLoadGame.PerformClick();
         }
 
-        private void TmrClock_Tick(object sender, EventArgs e)
+        private async void TmrClock_Tick(object sender, EventArgs e)
         {
             _time--;
             if (_time <= 0)
             {
                 tmrClock.Stop();
-                MessageBox.Show("Times up");
+                MessageBox.Show("Times up.Click Okay to save solution");
+                isGameStarted(false);
+                await SaveGame();
             }
             else
             {
@@ -462,7 +496,16 @@ namespace BlocklyPro.GameRunner
 
         private void BtnGo_Click(object sender, EventArgs e)
         {
+            if (!Helper.Confirm("Are you sure Start game"))
+                return;
+            isGameStarted(true);
             tmrClock.Start();
+        }
+
+        void isGameStarted(bool isStarted)
+        {
+            btnHint.Enabled = !isStarted;
+            btnGo.Enabled = !isStarted;
         }
 
         void SetClock()
@@ -471,6 +514,11 @@ namespace BlocklyPro.GameRunner
         }
 
         private async void BtnSave_Click(object sender, EventArgs e)
+        {
+            await SaveGame();
+        }
+
+        async Task SaveGame()
         {
             try
             {
@@ -530,10 +578,14 @@ namespace BlocklyPro.GameRunner
 
         private async void BtnLoadPlayGame_Click(object sender, EventArgs e)
         {
-            await LoadPlayGame();
+            var playgameId = ((System.Collections.Generic.KeyValuePair<int, string>)cmbPlayGames.SelectedItem).Key;
+            var result = await _gameServiceRepository.GetGamePlaysCode(
+                new Request<int>(playgameId).SetToken());
+              LoadPlayGame(result);
+              btnReset.PerformClick();
         }
 
-        private async Task LoadPlayGame()
+        private void LoadPlayGame(PlayGameModel playGameModel)
         {
 
             try
@@ -542,11 +594,7 @@ namespace BlocklyPro.GameRunner
                 //    return;
 
                 ClearCode();
-
-                var result = await _gameServiceRepository.GetGamePlaysCode(
-                    new Request<int>(_selectedGameId).SetToken());
-
-                var gameCodes = result.GameCodes.OrderBy(p => p.Order).ToList();
+                var gameCodes = playGameModel.GameCodes.OrderBy(p => p.Order).ToList();
 
                 for (var i = 2; i < gameCodes.Count; i++)
                 {
@@ -581,6 +629,18 @@ namespace BlocklyPro.GameRunner
                 new ExceptionHandler(exception);
             }
         }
+
+        private async Task LoadSolution()
+        {
+            try
+            {
+                this._correctSolution = await _gameServiceRepository.GetGameSolution(new Request<int>(_selectedGameId).SetToken());
+            }
+            catch (Exception exception)
+            {
+                new ExceptionHandler(exception);
+            }
+        }
         private void BtnClear_Click(object sender, EventArgs e)
         {
             ClearCode();
@@ -595,7 +655,8 @@ namespace BlocklyPro.GameRunner
                 var needToRemove = new List<Control>();
                 for (var i = 0; i < codeCore.Controls.Count; i++)
                 {
-                    if (codeCore.Controls[i] is UcMoveForward || codeCore.Controls[i] is UcTurn)
+                    if (codeCore.Controls[i] is UcMoveForward || codeCore.Controls[i] is UcTurn
+                        || codeCore.Controls[i] is UCLoop2)
                     {
                         needToRemove.Add(codeCore.Controls[i]);
                     }
@@ -608,5 +669,31 @@ namespace BlocklyPro.GameRunner
             }
         }
 
+        private void BtnForcast_Click(object sender, EventArgs e)
+        {
+            var obj = new FrmForcasting();
+            obj.ShowDialog();
+        }
+
+        private void BtnHint_Click(object sender, EventArgs e)
+        {
+            codeCore.Visible = false;
+            LoadPlayGame(_correctSolution);
+            btnPlay.PerformClick();
+        }
+
+        private async void CmbPlayGames_SelectedIndexChanged(object sender, EventArgs e)
+        { 
+        }
+
+        private void CodeCore_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void BtnReset_Click(object sender, EventArgs e)
+        {
+            ResetCode();
+        }
     }
 }

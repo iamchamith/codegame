@@ -21,6 +21,7 @@ namespace BlocklyPro.ServiceRepository.Identity
         private string getGamePlaysEndpoint = "/games/{0}/plays/{1}";
         private string getGamePlaysCodeEndpoint = "/games/codes/{0}";
         private string createGamePlaysEndpoint = "/games/plays";
+        private string gameSolutionEndpoint = "/games/{0}/solutions";
 
         public GameServiceRepository(IXHRServiceRepository serviceRepository) : base("/api/v1")
         {
@@ -37,7 +38,7 @@ namespace BlocklyPro.ServiceRepository.Identity
             getGamePlaysEndpoint = BaseApiEndpoint.AsUrlCombineWith(getGamePlaysEndpoint);
             getGamePlaysCodeEndpoint = BaseApiEndpoint.AsUrlCombineWith(getGamePlaysCodeEndpoint);
             createGamePlaysEndpoint = BaseApiEndpoint.AsUrlCombineWith(createGamePlaysEndpoint);
-
+            gameSolutionEndpoint = BaseApiEndpoint.AsUrlCombineWith(gameSolutionEndpoint);
             _serviceRepository = serviceRepository;
 
         }
@@ -100,6 +101,12 @@ namespace BlocklyPro.ServiceRepository.Identity
         {
             await _serviceRepository.Post<PlayGameModel>(
               request.ToXhrRequest(createGamePlaysEndpoint));
+        }
+
+        public async Task<PlayGameModel> GetGameSolution(Request<int> request)
+        {
+            return await _serviceRepository.Get<PlayGameModel>(
+                request.ToXhrRequest(string.Format(gameSolutionEndpoint, request.Item)));
         }
     }
 }

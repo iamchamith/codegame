@@ -105,7 +105,27 @@ namespace BlocklyPro.Core.AppService
             {
                 var result = await _unitOfWork.PlayGameRepository.TableAsNoTracking
                     .Include(p => p.GameCode)
-                    .Where(p => p.GameId == request.Item)
+                    .Where(p => p.Id == request.Item)
+                    .SingleOrDefaultAsync();
+                if (result.IsNull())
+                    throw new RecordNotFoundException();
+                var finalResult = _mapper.Map<PlayGameDto>(result);
+                result.GameCode.ForEach(item => { finalResult.SetGameCode(_mapper.Map<GameCodeDto>(item)); });
+                return finalResult;
+            }
+            catch (Exception e)
+            {
+                throw e.HandleException();
+            }
+        }
+
+        public async Task<PlayGameDto> ReadGameSolution(Request<int> request)
+        {
+            try
+            {
+                var result = await _unitOfWork.PlayGameRepository.TableAsNoTracking
+                    .Include(p => p.GameCode)
+                    .Where(p => p.GameId == request.Item && p.IsCorrectSolution)
                     .SingleOrDefaultAsync();
                 if (result.IsNull())
                     throw new RecordNotFoundException();

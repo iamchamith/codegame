@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace BlocklyPro.Forcasting
 {
-    public partial class Forcasting : Form
+    public partial class FrmForcasting : Form
     {
-        public Forcasting()
+        public FrmForcasting()
         {
             InitializeComponent();
         }

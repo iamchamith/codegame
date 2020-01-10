@@ -1,6 +1,6 @@
 ﻿namespace BlocklyPro.Forcasting
 {
-    partial class Forcasting
+    partial class FrmForcasting
     {
         /// <summary>
         /// Required designer variable.
@@ -216,7 +216,7 @@
             this.Controls.Add(this.lblMeanAbsoluteDeviation);
             this.Controls.Add(this.lblMeanSignedDeviaiton);
             this.Controls.Add(this.grdResults);
-            this.Name = "Forcasting";
+            this.Name = "FrmForcasting";
             this.Text = "FrmForcasting";
             this.Load += new System.EventHandler(this.Forcasting_Load);
             ((System.ComponentModel.ISupportInitialize)(this.grdResults)).EndInit();

@@ -181,7 +181,7 @@ namespace BlocklyPro.Api.Controllers.V1
             try
             {
                 _httpContext = HttpContext;
-                var result = await _gameRunnerAppService.ReadPlayGame(Request(gameplayid));
+                 var result = await _gameRunnerAppService.ReadPlayGame(Request(gameplayid));
                 var fresult = _mapper.Map<PlayGameDto, PlayGameModel>(result);
                 return Ok(fresult);
             }
@@ -190,6 +190,21 @@ namespace BlocklyPro.Api.Controllers.V1
                 return HandleException(e);
             }
         }
+        [HttpGet("{id:int}/solutions")]
+        public async Task<IActionResult> GetGameSolution(int id)
+        {
+            try
+            {
+                _httpContext = HttpContext;
+                var result = await _gameRunnerAppService.ReadGameSolution(Request(id));
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return HandleException(e);
+            }
+        }
+
         [HttpPost("plays")]
         public async Task<IActionResult> CreateGamePlays([FromBody] PlayGameModel model)
         {
