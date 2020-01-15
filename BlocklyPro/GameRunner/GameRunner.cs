@@ -671,7 +671,7 @@ namespace BlocklyPro.GameRunner
 
         private void BtnForcast_Click(object sender, EventArgs e)
         {
-            var obj = new FrmForcasting();
+            var obj = new FrmForcasting(_gameServiceRepository,_selectedGameId);
             obj.ShowDialog();
         }
 

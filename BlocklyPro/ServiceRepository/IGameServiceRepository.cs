@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BlocklyPro.Models;
 using BlocklyPro.Utility;
@@ -22,5 +23,6 @@ namespace BlocklyPro.ServiceRepository
         Task<PlayGameModel> GetGamePlaysCode(Request<int> request);
         Task CreateGamePlays(Request<PlayGameModel> request);
         Task<PlayGameModel> GetGameSolution(Request<int> request);
+        Task<List<KeyValuePair<DateTime, int>>> GetMarksByGameId(Request<int> request);
     }
 }

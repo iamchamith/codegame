@@ -1,25 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using BlocklyPro.ServiceRepository;
+using BlocklyPro.Utility;
 
 namespace BlocklyPro.Forcasting
 {
     public partial class FrmForcasting : Form
     {
-        public FrmForcasting()
+        private readonly IGameServiceRepository _gameServiceRepository;
+        private List<KeyValuePair<DateTime, int>> _gameMarks;
+        private int _gameId { get; }
+        public FrmForcasting(IGameServiceRepository gameServiceRepository, int gameid)
         {
+            _gameServiceRepository = gameServiceRepository;
+            _gameId = gameid;
             InitializeComponent();
+        }
+        async Task LoadInfo()
+        {
+            _gameMarks = await _gameServiceRepository.GetMarksByGameId(new Request<int>(_gameId).SetToken());
         }
 
         private void CmdNaive_Click(object sender, EventArgs e)
         {
-            ForecastTable dt = TimeSeries.naive(GetInput(), 5, 0);
+            ForecastTable dt = TimeSeries.naive(GetInput().ToArray(), 5, 0);
             grdResults.DataSource = dt;
 
             updateMeasurements(dt);
@@ -27,7 +34,7 @@ namespace BlocklyPro.Forcasting
 
         private void CmdSMA_Click(object sender, EventArgs e)
         {
-            ForecastTable dt = TimeSeries.simpleMovingAverage(GetInput(), 5, 3, 0);
+            ForecastTable dt = TimeSeries.simpleMovingAverage(GetInput().ToArray(), 5, 3, 0);
             grdResults.DataSource = dt;
 
             updateMeasurements(dt);
@@ -35,7 +42,7 @@ namespace BlocklyPro.Forcasting
 
         private void CmdWMA_Click(object sender, EventArgs e)
         {
-            ForecastTable dt = TimeSeries.weightedMovingAverage(GetInput(), 5, (Decimal)0.05, (Decimal)0.15, (Decimal)0.8);
+            ForecastTable dt = TimeSeries.weightedMovingAverage(GetInput().ToArray(), 5, (Decimal)0.05, (Decimal)0.15, (Decimal)0.8);
             grdResults.DataSource = dt;
 
             updateMeasurements(dt);
@@ -43,7 +50,7 @@ namespace BlocklyPro.Forcasting
 
         private void CmdES_Click(object sender, EventArgs e)
         {
-            ForecastTable dt = TimeSeries.exponentialSmoothing(GetInput(), 5, (Decimal)0.8);
+            ForecastTable dt = TimeSeries.exponentialSmoothing(GetInput().ToArray(), 5, (Decimal)0.8);
             grdResults.DataSource = dt;
 
             updateMeasurements(dt);
@@ -51,7 +58,7 @@ namespace BlocklyPro.Forcasting
 
         private void CmdARS_Click(object sender, EventArgs e)
         {
-            ForecastTable dt = TimeSeries.adaptiveRateSmoothing(GetInput(), 5, (Decimal)0.2, (Decimal)0.8);
+            ForecastTable dt = TimeSeries.adaptiveRateSmoothing(GetInput().ToArray(), 5, (Decimal)0.2, (Decimal)0.8);
             grdResults.DataSource = dt;
 
             updateMeasurements(dt);
@@ -67,21 +74,18 @@ namespace BlocklyPro.Forcasting
             lblMeanSquaredError.Text = "MSE: " + TimeSeries.MeanSquaredError(dt, false, TimeSeries.DEFAULT_IGNORE, 0).ToString();
             lblTrackingSignal.Text = "TS: " + TimeSeries.TrackingSignal(dt, false, TimeSeries.DEFAULT_IGNORE).ToString();
         }
-        private Decimal[] GetInput()
+        private List<decimal> GetInput()
         {
-            String[] arrStr = TextBox1.Text.Split(",".ToArray());
-            Decimal[] arrDec = new Decimal[arrStr.Length];
-
-            for (Int32 i = 0; i < arrStr.Length; i++)
+            if (_gameMarks==null || _gameMarks.Count==0)
             {
-                arrDec[i] = Decimal.Parse(arrStr[i]);
+                return new List<decimal>();
             }
-
-            return arrDec;
+            return this._gameMarks.Select(p => p.Value).Select(i => (decimal)i).ToList();
         }
-        private void Forcasting_Load(object sender, EventArgs e)
+        private async void Forcasting_Load(object sender, EventArgs e)
         {
             TextBox1.Text = "4,2,5,3,6,4,7,5,8,6,9,7";
+            await LoadInfo();
         }
     }
 }

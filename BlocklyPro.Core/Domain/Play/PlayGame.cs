@@ -44,5 +44,14 @@ namespace BlocklyPro.Core.Domain.Play
             });
             return this;
         }
+
+        public PlayGame SetScore(bool isProgramWorking)
+        {
+            if (!isProgramWorking)
+                Score = 0;
+            else
+                Score = Helper.CYC.Calculate(GameCode);
+            return this;
+        }
     }
 }

@@ -64,7 +64,8 @@ namespace BlocklyPro.Core.AppService
             });
             var gamePlay = new PlayGame(request.Item1.GameId,
                     request.UserId)
-                .SaveCode(code);
+                .SaveCode(code)
+                .SetScore(true);
             if (request.Item2)
                 gamePlay.SetAsCorrectGame();
             await _unitOfWork.PlayGameRepository.CreateAndSave(gamePlay);
@@ -138,6 +139,25 @@ namespace BlocklyPro.Core.AppService
                 throw e.HandleException();
             }
         }
+
+        public async Task<List<KeyValuePair<DateTime, int>>> GetMarksByGameId(Request<int> request)
+        {
+            try
+            {
+                var result = await _unitOfWork.PlayGameRepository.TableAsNoTracking
+                    .Where(p => !p.IsCorrectSolution
+                                && p.PlayerId == request.UserId && p.GameId == request.Item)
+                    .OrderBy(p=>p.CreatedOn)
+                    .Select(p => new KeyValuePair<DateTime, int>(p.CreatedOn, p.Score))
+                    .ToListAsync();
+                return result;
+            }
+            catch (Exception e)
+            {
+                throw e.HandleException();
+            }
+        }
+
         #endregion
     }
 }

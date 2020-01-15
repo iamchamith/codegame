@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BlocklyPro.Models;
 using BlocklyPro.Utility;
@@ -22,7 +23,7 @@ namespace BlocklyPro.ServiceRepository.Identity
         private string getGamePlaysCodeEndpoint = "/games/codes/{0}";
         private string createGamePlaysEndpoint = "/games/plays";
         private string gameSolutionEndpoint = "/games/{0}/solutions";
-
+        private string getMarksEndpoint = "/games/{0}/marks";
         public GameServiceRepository(IXHRServiceRepository serviceRepository) : base("/api/v1")
         {
             createGameEndpoint = BaseApiEndpoint.AsUrlCombineWith(createGameEndpoint);
@@ -39,6 +40,9 @@ namespace BlocklyPro.ServiceRepository.Identity
             getGamePlaysCodeEndpoint = BaseApiEndpoint.AsUrlCombineWith(getGamePlaysCodeEndpoint);
             createGamePlaysEndpoint = BaseApiEndpoint.AsUrlCombineWith(createGamePlaysEndpoint);
             gameSolutionEndpoint = BaseApiEndpoint.AsUrlCombineWith(gameSolutionEndpoint);
+
+            getMarksEndpoint = BaseApiEndpoint.AsUrlCombineWith(getMarksEndpoint);
+
             _serviceRepository = serviceRepository;
 
         }
@@ -107,6 +111,12 @@ namespace BlocklyPro.ServiceRepository.Identity
         {
             return await _serviceRepository.Get<PlayGameModel>(
                 request.ToXhrRequest(string.Format(gameSolutionEndpoint, request.Item)));
+        }
+
+        public async Task<List<KeyValuePair<DateTime, int>>> GetMarksByGameId(Request<int> request)
+        {
+            return await _serviceRepository.Get<List<KeyValuePair<DateTime,int>>>(
+                request.ToXhrRequest(string.Format(getMarksEndpoint, request.Item)));
         }
     }
 }

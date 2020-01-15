@@ -220,6 +220,21 @@ namespace BlocklyPro.Api.Controllers.V1
                 return HandleException(e);
             }
         }
+
+        [HttpGet("{gameid:int}/marks")]
+        public async Task<IActionResult> GetMarksByGameId(int gameid)
+        {
+            try
+            {
+                _httpContext = HttpContext;
+                var result = await _gameRunnerAppService.GetMarksByGameId(Request(gameid));
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return HandleException(e);
+            }
+        }
         #endregion
     }
 }
