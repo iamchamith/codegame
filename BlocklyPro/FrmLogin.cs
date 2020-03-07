@@ -22,6 +22,12 @@ namespace BlocklyPro
         {
             try
             {
+                if (!txtEmail.Text.IsValiedEmail())
+                {
+                    MessageBox.Show("Email is not valid one");
+                    return;
+                }
+
                 var token = new TokenModel();
                 if (btnLogin.Text.Equals("LOGIN"))
                 {

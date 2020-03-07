@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Security.Policy;
+using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 
 namespace BlocklyPro.Utility
@@ -36,6 +37,15 @@ namespace BlocklyPro.Utility
         public static T ToObject<T>(this string jsonString)
         {
             return JsonConvert.DeserializeObject<T>(jsonString);
+        }
+
+        public static bool IsValiedEmail(this string email) {
+
+            if (string.IsNullOrEmpty(email))
+                return false;
+            Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
+            Match match = regex.Match(email);
+            return match.Success;
         }
     }
 }

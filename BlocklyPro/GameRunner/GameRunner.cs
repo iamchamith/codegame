@@ -35,6 +35,7 @@ namespace BlocklyPro.GameRunner
         {
             _gameServiceRepository = gameServiceRepository;
             InitializeComponent();
+            IsGameStarted(false);
         }
 
         public GameRunner(IGameServiceRepository gameServiceRepository, int gameIndex)
@@ -53,6 +54,8 @@ namespace BlocklyPro.GameRunner
             btnGo.Visible = lblTime.Visible =
                 btnHint.Visible= btnForcast.Visible=
                 cmbPlayGames.Visible = btnLoadPlayGame.Visible = false;
+
+            btnSave.Visible = _useToSubmitDefault;
         }
 
         private async void GameRunner_Load(object sender, EventArgs e)
@@ -100,6 +103,8 @@ namespace BlocklyPro.GameRunner
         {
             try
             {
+                if (this._selectedGameId == 0)
+                    return;
                 codeCore.Visible = true;
                 var index = 0;
                 RemoveItems();
@@ -147,24 +152,29 @@ namespace BlocklyPro.GameRunner
                 new ExceptionHandler(ex);
             }
         }
-
+        void ResetTime() {
+            _time = _selectedGameObject.Time * 60;
+        }
         private async Task ReadGameInfo()
         {
             _selectedGameObject = await _gameServiceRepository.ReadGame(new Request<int>(this._selectedGameId).SetToken());
-            _time = _selectedGameObject.Time * 60;
         }
 
         private async Task LoadPlayedGameList()
         {
             _playGames = await _gameServiceRepository.GetGamePlays(new Request<int>(_selectedGameId).SetToken());
+            var needSelectIndex = true;
+            cmbPlayGames.Text = "";
             if (_playGames == null || _playGames.Count == 0)
             {
-                return;
+                _playGames = new List<KeyValuePair<int, string>>();
+                needSelectIndex = false;
             }
             cmbPlayGames.ComboBox.ValueMember = "key";
             cmbPlayGames.ComboBox.DisplayMember = "value";
             cmbPlayGames.ComboBox.DataSource = _playGames;
-            cmbPlayGames.SelectedIndex = 0;
+            if (needSelectIndex)
+              cmbPlayGames.SelectedIndex = 0;
         }
  
         private async Task LoadGames()
@@ -290,6 +300,10 @@ namespace BlocklyPro.GameRunner
         #region play game
         private void btnPlay_Click(object sender, EventArgs e)
         {
+            PlayGame();
+        }
+
+        void PlayGame() {
             if (!_isGameRunning)
             {
                 _derection = Enums.Derection.Right;
@@ -304,7 +318,6 @@ namespace BlocklyPro.GameRunner
                 timer1.Stop();
                 IsGameRunnning(false);
             }
-           
         }
 
         void IsGameRunnning(bool isGameRunning)
@@ -485,7 +498,7 @@ namespace BlocklyPro.GameRunner
             {
                 tmrClock.Stop();
                 MessageBox.Show("Times up.Click Okay to save solution");
-                isGameStarted(false);
+                IsGameStarted(false);
                 await SaveGame();
             }
             else
@@ -496,16 +509,21 @@ namespace BlocklyPro.GameRunner
 
         private void BtnGo_Click(object sender, EventArgs e)
         {
-            if (!Helper.Confirm("Are you sure Start game"))
+            if (!Helper.Confirm("Are you sure Start new Game solution?"))
                 return;
-            isGameStarted(true);
+            ResetTime();
+            btnClear.PerformClick();
+            IsGameStarted(true);
             tmrClock.Start();
         }
 
-        void isGameStarted(bool isStarted)
+        void IsGameStarted(bool isStarted)
         {
             btnHint.Enabled = !isStarted;
             btnGo.Enabled = !isStarted;
+            btnSave.Enabled = isStarted;
+            btnPlay.Enabled = isStarted;
+            btnCodeMenu.Enabled = isStarted;
         }
 
         void SetClock()
@@ -534,6 +552,11 @@ namespace BlocklyPro.GameRunner
                     });
                     await _gameServiceRepository.CreateGamePlays(new Request<PlayGameModel>(playGames).SetToken());
                     MessageBox.Show("Saved");
+
+                    if (!_useToSubmitDefault)
+                    {
+                        this.Close();
+                    }
                 }
             }
             catch (Exception exception)
@@ -578,6 +601,10 @@ namespace BlocklyPro.GameRunner
 
         private async void BtnLoadPlayGame_Click(object sender, EventArgs e)
         {
+            if (cmbPlayGames.SelectedItem == null) {
+                ClearCode();
+                return;
+            }      
             var playgameId = ((System.Collections.Generic.KeyValuePair<int, string>)cmbPlayGames.SelectedItem).Key;
             var result = await _gameServiceRepository.GetGamePlaysCode(
                 new Request<int>(playgameId).SetToken());
@@ -596,7 +623,7 @@ namespace BlocklyPro.GameRunner
                 ClearCode();
                 var gameCodes = playGameModel.GameCodes.OrderBy(p => p.Order).ToList();
 
-                for (var i = 2; i < gameCodes.Count; i++)
+                for (var i = 0; i < gameCodes.Count; i++)
                 {
                     var item = gameCodes[i];
                     var movex = new UserControl();
@@ -616,8 +643,12 @@ namespace BlocklyPro.GameRunner
                         movex = new UCLoop2(this).SetPayload(item.Payload.ToObject<Loop2>());
                         codeIndex += UCLoop2.Height;
                     }
+                    else if (new List<int> { UcLoop.Identify, UcFunction.Identify }.Contains(item.CodeType))
+                    {
+                        continue;
+                    }
                     else
-                        throw new ArgumentException();
+                        continue;
 
                     movex.Location = new Point(10, codeIndex);
                     codeCore.Controls.Add(movex);
@@ -635,10 +666,12 @@ namespace BlocklyPro.GameRunner
             try
             {
                 this._correctSolution = await _gameServiceRepository.GetGameSolution(new Request<int>(_selectedGameId).SetToken());
+                LoadPlayGame(_correctSolution);
             }
             catch (Exception exception)
             {
-                new ExceptionHandler(exception);
+                if (!_useToSubmitDefault)
+                    new ExceptionHandler(exception);
             }
         }
         private void BtnClear_Click(object sender, EventArgs e)
@@ -677,9 +710,11 @@ namespace BlocklyPro.GameRunner
 
         private void BtnHint_Click(object sender, EventArgs e)
         {
+            if (!Helper.Confirm("When process hint run, your code will be lose.Sure to do this task?"))
+                return;
             codeCore.Visible = false;
             LoadPlayGame(_correctSolution);
-            btnPlay.PerformClick();
+            PlayGame();
         }
 
         private async void CmbPlayGames_SelectedIndexChanged(object sender, EventArgs e)
@@ -694,6 +729,11 @@ namespace BlocklyPro.GameRunner
         private void BtnReset_Click(object sender, EventArgs e)
         {
             ResetCode();
+        }
+
+        private void CodeCore_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            btnReset.PerformClick();
         }
     }
 }

@@ -118,6 +118,8 @@
             this.Controls.Add(this.txtEmail);
             this.Controls.Add(this.PASSWORD);
             this.Controls.Add(this.label1);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "FrmLogin";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "LOGIN";

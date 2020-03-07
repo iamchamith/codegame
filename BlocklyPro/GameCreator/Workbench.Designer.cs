@@ -39,14 +39,14 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.cmbGames = new System.Windows.Forms.ToolStripComboBox();
             this.btnNewGame = new System.Windows.Forms.ToolStripButton();
+            this.btnUpdateGame = new System.Windows.Forms.ToolStripButton();
             this.btnDeleteGame = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.btnSave = new System.Windows.Forms.ToolStripButton();
             this.btnLoadGame = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.btnDeleteObject = new System.Windows.Forms.ToolStripButton();
             this.btnPlay = new System.Windows.Forms.ToolStripButton();
             this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
-            this.btnUpdateGame = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -73,7 +73,7 @@
             this.toolStripSeparator2,
             this.btnSave,
             this.btnLoadGame,
-            this.toolStripButton1,
+            this.btnDeleteObject,
             this.btnPlay});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
@@ -121,7 +121,7 @@
             // cmbGames
             // 
             this.cmbGames.Name = "cmbGames";
-            this.cmbGames.Size = new System.Drawing.Size(121, 32);
+            this.cmbGames.Size = new System.Drawing.Size(250, 32);
             this.cmbGames.SelectedIndexChanged += new System.EventHandler(this.CmbGames_SelectedIndexChanged);
             this.cmbGames.Click += new System.EventHandler(this.CmbGames_Click);
             // 
@@ -132,8 +132,18 @@
             this.btnNewGame.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnNewGame.Name = "btnNewGame";
             this.btnNewGame.Size = new System.Drawing.Size(23, 29);
-            this.btnNewGame.Text = "Create a game";
+            this.btnNewGame.Text = "Create a New game";
             this.btnNewGame.Click += new System.EventHandler(this.btnNewGame_Click);
+            // 
+            // btnUpdateGame
+            // 
+            this.btnUpdateGame.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnUpdateGame.Image = ((System.Drawing.Image)(resources.GetObject("btnUpdateGame.Image")));
+            this.btnUpdateGame.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnUpdateGame.Name = "btnUpdateGame";
+            this.btnUpdateGame.Size = new System.Drawing.Size(23, 29);
+            this.btnUpdateGame.Text = "Save Game Information";
+            this.btnUpdateGame.Click += new System.EventHandler(this.BtnUpdateGame_Click);
             // 
             // btnDeleteGame
             // 
@@ -142,8 +152,9 @@
             this.btnDeleteGame.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnDeleteGame.Name = "btnDeleteGame";
             this.btnDeleteGame.Size = new System.Drawing.Size(23, 29);
-            this.btnDeleteGame.Text = "Delete Game";
+            this.btnDeleteGame.Text = "Delete This Game";
             this.btnDeleteGame.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this.btnDeleteGame.Visible = false;
             this.btnDeleteGame.Click += new System.EventHandler(this.btnDeleteGame_Click);
             // 
             // toolStripSeparator2
@@ -168,18 +179,18 @@
             this.btnLoadGame.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnLoadGame.Name = "btnLoadGame";
             this.btnLoadGame.Size = new System.Drawing.Size(23, 29);
-            this.btnLoadGame.Text = "Reload game";
+            this.btnLoadGame.Text = "Reload This Game";
             this.btnLoadGame.Click += new System.EventHandler(this.btnLoadGame_Click);
             // 
-            // toolStripButton1
+            // btnDeleteObject
             // 
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton1.Image = global::BlocklyPro.Properties.Resources.delete;
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(23, 29);
-            this.toolStripButton1.Text = "Delete Object";
-            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
+            this.btnDeleteObject.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnDeleteObject.Image = global::BlocklyPro.Properties.Resources.delete;
+            this.btnDeleteObject.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnDeleteObject.Name = "btnDeleteObject";
+            this.btnDeleteObject.Size = new System.Drawing.Size(23, 29);
+            this.btnDeleteObject.Text = "Delete Object On This Game";
+            this.btnDeleteObject.Click += new System.EventHandler(this.toolStripButton1_Click);
             // 
             // btnPlay
             // 
@@ -188,7 +199,7 @@
             this.btnPlay.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnPlay.Name = "btnPlay";
             this.btnPlay.Size = new System.Drawing.Size(23, 29);
-            this.btnPlay.Text = "Play";
+            this.btnPlay.Text = "Play This Game";
             this.btnPlay.Click += new System.EventHandler(this.btnPlay_Click);
             // 
             // propertyGrid1
@@ -198,16 +209,6 @@
             this.propertyGrid1.Name = "propertyGrid1";
             this.propertyGrid1.Size = new System.Drawing.Size(170, 533);
             this.propertyGrid1.TabIndex = 10;
-            // 
-            // btnUpdateGame
-            // 
-            this.btnUpdateGame.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnUpdateGame.Image = ((System.Drawing.Image)(resources.GetObject("btnUpdateGame.Image")));
-            this.btnUpdateGame.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnUpdateGame.Name = "btnUpdateGame";
-            this.btnUpdateGame.Size = new System.Drawing.Size(23, 29);
-            this.btnUpdateGame.Text = "toolStripButton2";
-            this.btnUpdateGame.Click += new System.EventHandler(this.BtnUpdateGame_Click);
             // 
             // Workbench
             // 
@@ -244,7 +245,7 @@
         private System.Windows.Forms.ToolStripButton btnSave;
         private System.Windows.Forms.ToolStripComboBox cmbGames;
         private System.Windows.Forms.ToolStripButton btnLoadGame;
-        private System.Windows.Forms.ToolStripButton toolStripButton1;
+        private System.Windows.Forms.ToolStripButton btnDeleteObject;
         private System.Windows.Forms.ToolStripButton btnPlay;
         private System.Windows.Forms.ToolStripButton btnNewGame;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;

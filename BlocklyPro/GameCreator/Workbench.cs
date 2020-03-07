@@ -50,10 +50,27 @@ namespace BlocklyPro.GameCreator
             this.MinimizeBox = false;
         }
 
+        void EnableCreateGameMenu(bool isEnable = false)
+        {
+            btnVerticalLine.Enabled = isEnable;
+            btnHorizontalLine.Enabled = isEnable;
+            btnChar.Enabled = isEnable;
+            btnTarget.Enabled = isEnable;
+        }
+
+        void EnableToolBox(bool isEnable = false)
+        {
+            btnSave.Enabled = isEnable;
+            btnUpdateGame.Enabled = isEnable;
+            btnDeleteObject.Enabled = isEnable;
+        }
+
         private async void Workbench_Load(object sender, EventArgs e)
         {
             timer1.Start();
             await LoadGames();
+            EnableCreateGameMenu(false);
+            EnableToolBox(true);
         }
 
         #region events
@@ -516,56 +533,55 @@ namespace BlocklyPro.GameCreator
 
         private async void btnSave_Click(object sender, EventArgs e)
         {
-            var gameId = ((System.Collections.Generic.KeyValuePair<int, string>)cmbGames.SelectedItem).Key;
-            var gameMap = new List<GameMapModel>();
-            Enums.ControllerType type;
-            foreach (Control item in Controls)
-            {
-                UserControl itemx;
-                if (item.Name.StartsWith("ucHorizontalLine_"))
-                {
-                    itemx = item as UCHorizontalLine;
-                    type = Enums.ControllerType.HorizontalLine;
-                }
-                else if (item.Name.StartsWith("ucVerticalLine_"))
-                {
-                    itemx = item as UCVerticalLine;
-                    type = Enums.ControllerType.VerticalLine;
-                }
-                else if (item.Name.StartsWith("ucTarget_"))
-                {
-                    itemx = item as UCTarget;
-                    type = Enums.ControllerType.Target;
-                }
-                else if (item.Name.StartsWith("ucChar_"))
-                {
-                    itemx = item as UCCharactor;
-                    type = Enums.ControllerType.Charactor;
-                }
-                else
-                {
-                    continue;
-                }
-
-                gameMap.Add(new GameMapModel
-                {
-                    ControllerType = type,
-                    GameId = gameId,
-                    Height = itemx.Height,
-                    Width = itemx.Width,
-                    PointX = itemx.Location.X,
-                    PointY = itemx.Location.Y
-                });
-            }
-
             try
             {
+                var gameId = ((System.Collections.Generic.KeyValuePair<int, string>)cmbGames.SelectedItem).Key;
+                var gameMap = new List<GameMapModel>();
+                Enums.ControllerType type;
+                foreach (Control item in Controls)
+                {
+                    UserControl itemx;
+                    if (item.Name.StartsWith("ucHorizontalLine_"))
+                    {
+                        itemx = item as UCHorizontalLine;
+                        type = Enums.ControllerType.HorizontalLine;
+                    }
+                    else if (item.Name.StartsWith("ucVerticalLine_"))
+                    {
+                        itemx = item as UCVerticalLine;
+                        type = Enums.ControllerType.VerticalLine;
+                    }
+                    else if (item.Name.StartsWith("ucTarget_"))
+                    {
+                        itemx = item as UCTarget;
+                        type = Enums.ControllerType.Target;
+                    }
+                    else if (item.Name.StartsWith("ucChar_"))
+                    {
+                        itemx = item as UCCharactor;
+                        type = Enums.ControllerType.Charactor;
+                    }
+                    else
+                    {
+                        continue;
+                    }
+
+                    gameMap.Add(new GameMapModel
+                    {
+                        ControllerType = type,
+                        GameId = gameId,
+                        Height = itemx.Height,
+                        Width = itemx.Width,
+                        PointX = itemx.Location.X,
+                        PointY = itemx.Location.Y
+                    });
+                }
                 await _gameServiceRepository.SaveGameMap(new Request<int, List<GameMapModel>>(gameId, gameMap).SetToken());
                 MessageBox.Show("Saved");
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Helper.Error(ex: ex);
+                MessageBox.Show("Please create a game first");
             }
         }
 
@@ -713,7 +729,10 @@ namespace BlocklyPro.GameCreator
         private void CmbGames_SelectedIndexChanged(object sender, EventArgs e)
         {
             this._selectedGame = ((System.Collections.Generic.KeyValuePair<int, string>)cmbGames.SelectedItem).Key;
+            var gameVal = ((System.Collections.Generic.KeyValuePair<int, string>)cmbGames.SelectedItem).Value;
             btnLoadGame.PerformClick();
+            EnableCreateGameMenu(gameVal.Contains("Published") ? false : true);
+            EnableToolBox(gameVal.Contains("Published") ? false : true);
         }
 
         private bool CheckUcIsThere(string controllerName)

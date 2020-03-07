@@ -93,8 +93,9 @@
             // 
             // cmbGames
             // 
+            this.cmbGames.DropDownWidth = 250;
             this.cmbGames.Name = "cmbGames";
-            this.cmbGames.Size = new System.Drawing.Size(121, 40);
+            this.cmbGames.Size = new System.Drawing.Size(250, 40);
             this.cmbGames.SelectedIndexChanged += new System.EventHandler(this.CmbGames_SelectedIndexChanged);
             // 
             // btnCodeMenu
@@ -167,7 +168,6 @@
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(23, 37);
             this.btnSave.Text = "Save";
-            this.btnSave.Visible = false;
             this.btnSave.Click += new System.EventHandler(this.BtnSave_Click);
             // 
             // toolStripSeparator2
@@ -265,6 +265,7 @@
             this.codeCore.Size = new System.Drawing.Size(396, 493);
             this.codeCore.TabIndex = 11;
             this.codeCore.Paint += new System.Windows.Forms.PaintEventHandler(this.CodeCore_Paint);
+            this.codeCore.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.CodeCore_MouseDoubleClick);
             // 
             // btnReset
             // 
